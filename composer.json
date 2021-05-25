@@ -1,0 +1,23 @@
+{
+    "name": "beta/base.vote",
+    "description": "Simple wrapper bitrix vote",
+    "type": "lib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Nesterov",
+            "email": "alex19pov31@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "beta/bx.model": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Base\\Vote\\": "src/"
+        }
+    }
+}
