@@ -4,23 +4,22 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1e26c7e1db9df04c85508140dd0ceb9",
+    "content-hash": "775ad9d2effa5e506778f0898a100f39",
     "packages": [
         {
             "name": "beta/bx.model",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bx.model.git",
-                "reference": "328e2806ec7b5349254d0a40305574b714f43965"
+                "reference": "8d7446eee24bcd798150b1eccd5d52571c737539"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/328e2806ec7b5349254d0a40305574b714f43965",
-                "reference": "328e2806ec7b5349254d0a40305574b714f43965",
+                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/8d7446eee24bcd798150b1eccd5d52571c737539",
+                "reference": "8d7446eee24bcd798150b1eccd5d52571c737539",
                 "shasum": ""
             },
-            "default-branch": true,
             "type": "bitrix-module",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -34,17 +33,15 @@
             ],
             "support": {
                 "issues": "https://github.com/beta-eto-code/bx.model/issues",
-                "source": "https://github.com/beta-eto-code/bx.model/tree/0.7.0"
+                "source": "https://github.com/beta-eto-code/bx.model/tree/1.0.0"
             },
-            "time": "2021-05-24T16:55:03+00:00"
+            "time": "2021-07-14T16:22:19+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "beta/bx.model": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -52,5 +49,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
