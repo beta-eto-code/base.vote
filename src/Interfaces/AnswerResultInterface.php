@@ -8,12 +8,12 @@ interface AnswerResultInterface extends BaseElementInterface
 {
     /**
      * @param AnswerVariantInterface $answerVariant
-     * @param string $message
-     * @return ResultAnswerInterface
+     * @param string|null $message
+     * @return AnswerResultInterface
      */
     public static function createNewResultAnswer(
-        AnswerVariantInterface $answerVariant, 
-        string $message = null
+        AnswerVariantInterface $answerVariant,
+        ?string $message = null
     ): AnswerResultInterface;
     /**
      * @return AnswerVariantInterface

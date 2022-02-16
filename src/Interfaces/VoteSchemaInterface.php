@@ -11,10 +11,10 @@ interface VoteSchemaInterface extends BaseElementInterface
 {
     /**
      * @param string $title
-     * @param string $description
+     * @param string|null $description
      * @return VoteSchemaInterface
      */
-    public static function createNewVote(string $title, string $description = null): VoteSchemaInterface;
+    public static function createNewVote(string $title, ?string $description = null): VoteSchemaInterface;
     /**
      * Название опроса
      * @return string
@@ -66,6 +66,8 @@ interface VoteSchemaInterface extends BaseElementInterface
     /**
      * @param string|null $action
      * @return QuestionInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getQuestions(string $action = null): ReadableCollectionInterface;
     /**

@@ -17,21 +17,27 @@ interface VoteResultInterface extends BaseElementInterface
      * @return VoteSchemaInterface
      */
     public function getVoteSchema(): VoteSchemaInterface;
+
     /**
      * @param AnswerVariantInterface $answerVariant
-     * @param string $message
+     * @param string|null $message
      * @return AnswerResultInterface
      */
-    public function createAnswerResult(AnswerVariantInterface $answerVariant, string $message = null): AnswerResultInterface;
+    public function createAnswerResult(
+        AnswerVariantInterface $answerVariant,
+        ?string $message = null
+    ): AnswerResultInterface;
+
     /**
-     * @param AnswerVariantInterface $answerVariant
-     * @param string $message
+     * @param string $questionTitle
+     * @param string $answerVariantTitle
+     * @param string|null $message
      * @return AnswerResultInterface|null
      */
     public function createAnswerResultByTitle(
-        string $questionTitle, 
-        string $answerVariantTitle, 
-        string $message = null
+        string $questionTitle,
+        string $answerVariantTitle,
+        ?string $message = null
     ): ?AnswerResultInterface;
     /**
      * @param AnswerResultInterface $answerResult
@@ -41,11 +47,15 @@ interface VoteResultInterface extends BaseElementInterface
     /**
      * @param QuestionInterface $question
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultsByQuestion(QuestionInterface $question): ReadableCollectionInterface;
     /**
      * @param string $questionTitle
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultByQuestionTitle(string $questionTitle): ReadableCollectionInterface;
     /**
@@ -66,6 +76,8 @@ interface VoteResultInterface extends BaseElementInterface
     public function removeAnswerResult(AnswerResultInterface $answerResult, bool $isMoved = false);
     /**
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResults(string $action = null): ReadableCollectionInterface;
     /**
@@ -75,6 +87,8 @@ interface VoteResultInterface extends BaseElementInterface
     /**
      * @param QuestionInterface $question
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultByQuestion(QuestionInterface $question): ReadableCollectionInterface;
 }

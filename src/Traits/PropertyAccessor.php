@@ -9,7 +9,7 @@ trait PropertyAccessor
     /**
      * @var array
      */
-    protected $props;
+    protected $props = [];
 
     /**
      * @param array $props
@@ -44,6 +44,6 @@ trait PropertyAccessor
      */
     protected function getProps(): array
     {
-        return $this->props ?? [];
+        return $this->props;
     }
 }

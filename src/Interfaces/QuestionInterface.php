@@ -75,6 +75,8 @@ interface QuestionInterface extends BaseElementInterface
     /**
      * @param string|null $action
      * @return AnswerVariantInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerVariants(string $action = null): ReadableCollectionInterface;
     /**

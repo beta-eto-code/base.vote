@@ -53,7 +53,7 @@ class Question implements QuestionInterface
         $this->answers = new SplObjectStorage();
 
         $answersDataList = (array)($data['answers'] ?? []);
-        foreach($answersDataList as $answerData) {
+        foreach ($answersDataList as $answerData) {
             if (is_array($answerData)) {
                 $answer = new AnswerVariant($answerData);
                 $this->addAnswerVariant($answer);
@@ -121,7 +121,7 @@ class Question implements QuestionInterface
      */
     public function getAnswerVariantByTitle(string $title): ?AnswerVariantInterface
     {
-        foreach($this->answers as $answer) {
+        foreach ($this->answers as $answer) {
             /**
              * @var AnswerVariantInterface $answer
              */
@@ -132,7 +132,7 @@ class Question implements QuestionInterface
 
         return null;
     }
-    
+
     /**
      * Добавляем новый вариант ответа
      * @param AnswerVariantInterface $answerVariant
@@ -151,7 +151,7 @@ class Question implements QuestionInterface
         $answerVariant->setQuestion($this);
         $this->normalizeTypes($answerVariant);
     }
-    
+
     /**
      * Создаем новый вариант ответа
      * @param string $title
@@ -173,6 +173,10 @@ class Question implements QuestionInterface
         return $answerVariant;
     }
 
+    /**
+     * @param AnswerVariantInterface $answerVariant
+     * @return void
+     */
     private function normalizeTypes(AnswerVariantInterface $answerVariant)
     {
         if ($answerVariant->getType() !== $this->type && $this->type !== QuestionType::MIXED_TYPE) {
@@ -218,7 +222,7 @@ class Question implements QuestionInterface
     public function toArray(): array
     {
         $answerVariants = [];
-        foreach($this->getAnswerVariants() as $answer) {
+        foreach ($this->getAnswerVariants() as $answer) {
             /**
              * @var AnswerVariantInterface $answer
              */
@@ -237,11 +241,16 @@ class Question implements QuestionInterface
     /**
      * @param string|null $action
      * @return AnswerVariantInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerVariants(string $action = null): ReadableCollectionInterface
     {
         $collection = new Collection();
-        foreach($this->answers as $answer) {
+        foreach ($this->answers as $answer) {
+            /**
+             * @var AnswerVariantInterface $answer
+             */
             $currentAction = $this->answers[$answer];
             if ($action === null && $currentAction !== 'delete') {
                 $collection->append($answer);
@@ -258,9 +267,11 @@ class Question implements QuestionInterface
         $this->props = [];
         $this->vote = null;
     }
-    
+
     /**
      * @return integer
+     *
+     * @psalm-suppress PossiblyInvalidMethodCall
      */
     public function getAnswerVariantCount(): int
     {
@@ -282,7 +293,7 @@ class Question implements QuestionInterface
      */
     public function assertValueByKey(string $key, $value): bool
     {
-        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;   
+        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;
     }
 
     /**
@@ -304,14 +315,14 @@ class Question implements QuestionInterface
      */
     public function getValueByKey(string $key)
     {
-        switch($key) {
-            case 'title': 
+        switch ($key) {
+            case 'title':
                 return $this->getTitle();
-            case 'type': 
+            case 'type':
                 return $this->getType();
-            case 'is_required': 
+            case 'is_required':
                 return $this->isRequired();
-            case 'is_multiple': 
+            case 'is_multiple':
                 return $this->isMultiple();
             default:
                 return $this->props[$key] ?? null;

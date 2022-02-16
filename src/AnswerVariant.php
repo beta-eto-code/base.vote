@@ -60,7 +60,7 @@ class AnswerVariant implements AnswerVariantInterface
     {
         return $this->type;
     }
-    
+
     /**
      * @param integer $answerVariantType
      * @return void
@@ -112,7 +112,7 @@ class AnswerVariant implements AnswerVariantInterface
      */
     public function assertValueByKey(string $key, $value): bool
     {
-        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;   
+        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;
     }
 
     /**
@@ -134,10 +134,10 @@ class AnswerVariant implements AnswerVariantInterface
      */
     public function getValueByKey(string $key)
     {
-        switch($key) {
-            case 'title': 
+        switch ($key) {
+            case 'title':
                 return $this->getTitle();
-            case 'type': 
+            case 'type':
                 return $this->getType();
             default:
                 return $this->props[$key] ?? null;

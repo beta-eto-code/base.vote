@@ -37,15 +37,14 @@ class AnswerResult implements AnswerResultInterface
 
     /**
      * @param AnswerVariantInterface $answerVariant
-     * @param string $message
-     * @return ResultAnswerInterface
+     * @param string|null $message
+     * @return AnswerResultInterface
      */
     public static function createNewResultAnswer(
-        AnswerVariantInterface $answerVariant, 
-        string $message = null
-    ): AnswerResultInterface
-    {
-        return new static($answerVariant, [
+        AnswerVariantInterface $answerVariant,
+        ?string $message = null
+    ): AnswerResultInterface {
+        return new AnswerResult($answerVariant, [
             'message' => $message
         ]);
     }
@@ -93,7 +92,8 @@ class AnswerResult implements AnswerResultInterface
         $question = $answerVariant instanceof AnswerVariantInterface ? $answerVariant->getQuestion() : null;
         return [
             'question_title' => $question instanceof QuestionInterface ? $question->getTitle() : '',
-            'answer_variant_title' => $answerVariant instanceof AnswerVariantInterface ? $answerVariant->getTitle() : '',
+            'answer_variant_title' => $answerVariant instanceof AnswerVariantInterface ?
+                $answerVariant->getTitle() : '',
             'message' => $this->message,
             'props' => $this->getProps(),
         ];
@@ -106,7 +106,7 @@ class AnswerResult implements AnswerResultInterface
      */
     public function assertValueByKey(string $key, $value): bool
     {
-        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;   
+        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;
     }
 
     /**
@@ -131,7 +131,7 @@ class AnswerResult implements AnswerResultInterface
         if ($key === 'message') {
             $this->getMessage();
         }
-        
+
         return $this->props[$key] ?? null;
     }
 

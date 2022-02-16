@@ -18,12 +18,20 @@ interface VoteServiceInterface
      * @param array $criteria
      * @param integer|null $limit
      * @param integer|null $offset
-     * @return VoteSchemaInterface[]|CollectionInterface
+     * @return CollectionInterface|VoteSchemaInterface[]
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
-    public function getVoteSchemasByCriteria(array $criteria, int $limit = null, int $offset = null): CollectionInterface;
+    public function getVoteSchemasByCriteria(
+        array $criteria,
+        int $limit = null,
+        int $offset = null
+    ): CollectionInterface;
     /**
      * @param VoteSchemaInterface $voteSchema
      * @return Result
+     *
+     * @psalm-suppress UndefinedClass
      */
     public function saveVote(VoteSchemaInterface $voteSchema): Result;
     /**

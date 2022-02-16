@@ -26,6 +26,10 @@ class VoteSchema implements VoteSchemaInterface
      * @var SplObjectStorage
      */
     private $questions;
+    /**
+     * @var array
+     */
+    protected $props;
 
     public function __construct(array $data)
     {
@@ -33,9 +37,9 @@ class VoteSchema implements VoteSchemaInterface
         $this->description = (string)$data['description'];
         $this->props = (array)($data['props'] ?? []);
         $this->questions = new SplObjectStorage();
-        
+
         $questionDataList = (array)($data['questions'] ?? []);
-        foreach($questionDataList as $questionData) {
+        foreach ($questionDataList as $questionData) {
             if (is_array($questionData)) {
                 $question = new Question($questionData);
                 $this->addQuestion($question);
@@ -45,12 +49,12 @@ class VoteSchema implements VoteSchemaInterface
 
     /**
      * @param string $title
-     * @param string $description
+     * @param string|null $description
      * @return VoteSchemaInterface
      */
-    public static function createNewVote(string $title, string $description = null): VoteSchemaInterface
+    public static function createNewVote(string $title, ?string $description = null): VoteSchemaInterface
     {
-        return new static([
+        return new VoteSchema([
             'title' => $title,
             'description' => $description ?? '',
         ]);
@@ -80,7 +84,7 @@ class VoteSchema implements VoteSchemaInterface
      */
     public function getImage(): ?File
     {
-        return $this->props['image_file'] instanceof File ? $this->props['image_file'] : null; 
+        return $this->props['image_file'] instanceof File ? $this->props['image_file'] : null;
     }
 
     /**
@@ -109,7 +113,7 @@ class VoteSchema implements VoteSchemaInterface
     {
         return $this->props[$key] ?? null;
     }
-    
+
     /**
      * @param string $key
      * @param mixed $value
@@ -125,6 +129,9 @@ class VoteSchema implements VoteSchemaInterface
      */
     public function toArray(): array
     {
+        /**
+         * @psalm-suppress PossiblyInvalidMethodCall
+         */
         return [
             'title' => $this->title,
             'description' => $this->description,
@@ -139,7 +146,7 @@ class VoteSchema implements VoteSchemaInterface
      */
     public function getQuestionByTitle(string $title): ?QuestionInterface
     {
-        foreach($this->questions as $question) {
+        foreach ($this->questions as $question) {
             /**
              * @var QuestionInterface $question
              */
@@ -163,7 +170,7 @@ class VoteSchema implements VoteSchemaInterface
             $currentVote->removeQuestion($questionInterface, true);
             $action = 'move';
         }
-        
+
         $questionInterface->setVote($this);
         $this->questions->attach($questionInterface, $action);
     }
@@ -203,12 +210,16 @@ class VoteSchema implements VoteSchemaInterface
 
     /**
      * @param string $action
-     * @return QuestionInterface[]|ReadableCollectionInterface
+     * @return ReadableCollectionInterface|QuestionInterface[]
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getQuestions(string $action = null): ReadableCollectionInterface
     {
         $collection = new Collection();
-        foreach($this->questions as $question) {
+        foreach ($this->questions as $question) {
+            /**
+             * @var QuestionInterface $question
+             */
             $currentAction = $this->questions[$question];
             if ($action === null && $currentAction !== 'delete') {
                 $collection->append($question);
@@ -225,7 +236,7 @@ class VoteSchema implements VoteSchemaInterface
     public function getQuestionCount(): int
     {
         $count = 0;
-        foreach($this->questions as $question) {
+        foreach ($this->questions as $question) {
             $count++;
         }
 
@@ -239,7 +250,7 @@ class VoteSchema implements VoteSchemaInterface
      */
     public function assertValueByKey(string $key, $value): bool
     {
-        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;   
+        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;
     }
 
     /**
@@ -261,10 +272,10 @@ class VoteSchema implements VoteSchemaInterface
      */
     public function getValueByKey(string $key)
     {
-        switch($key) {
-            case 'title': 
+        switch ($key) {
+            case 'title':
                 return $this->getTitle();
-            case 'description': 
+            case 'description':
                 return $this->getDescription();
             default:
                 return $this->props[$key] ?? null;

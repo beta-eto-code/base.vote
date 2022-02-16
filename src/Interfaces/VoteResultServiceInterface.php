@@ -12,12 +12,17 @@ interface VoteResultServiceInterface
     /**
      * @param VoteResultInterface $voteResultInterface
      * @return Result
+     *
+     * @psalm-suppress UndefinedClass
      */
     public function saveVoteResult(VoteResultInterface $voteResult): Result;
+
     /**
      * @param VoteSchemaInterface $voteSchema
-     * @param integer $limit
+     * @param array $params
      * @return VoteResultInterface[]|CollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getVoteResultList(VoteSchemaInterface $voteSchema, array $params = []): CollectionInterface;
     /**

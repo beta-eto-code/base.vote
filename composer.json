@@ -18,5 +18,13 @@
         "psr-4": {
             "Base\\Vote\\": "src/"
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.6",
+        "vimeo/psalm": "^4.20"
+    },
+    "scripts": {
+        "cs": "phpcs --standard=PSR12 ./src/",
+        "analyze": "psalm --show-info=true"
     }
 }

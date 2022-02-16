@@ -6,10 +6,10 @@ namespace Base\Vote\Interfaces;
 
 class AnswerVariantType
 {
-    const RADIO = 0;
-    const CHECKBOX = 1;
-    const DROPDOWN = 2;
-    const MULTISELECT = 3;
-    const TEXT = 4;
-    const TEXTAREA = 5;
+    public const RADIO = 0;
+    public const CHECKBOX = 1;
+    public const DROPDOWN = 2;
+    public const MULTISELECT = 3;
+    public const TEXT = 4;
+    public const TEXTAREA = 5;
 }

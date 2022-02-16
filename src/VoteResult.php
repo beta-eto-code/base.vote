@@ -28,22 +28,31 @@ class VoteResult implements VoteResultInterface
      */
     private $answerResults;
 
+    /**
+     * @var array
+     */
+    protected $props;
+
     public function __construct(
-        VoteSchemaInterface $voteSchema, 
+        VoteSchemaInterface $voteSchema,
         array $data = []
-    )
-    {
+    ) {
         $this->voteSchema = $voteSchema;
         $this->answerResults = new SplObjectStorage();
+        $this->props = [];
         $this->initProps((array)($data['props'] ?? []));
 
         $answerResultDataList = (array)($data['answer'] ?? []);
         $this->loadAnswerResults($answerResultDataList);
     }
 
+    /**
+     * @param array $answerResultDataList
+     * @return void
+     */
     private function loadAnswerResults(array $answerResultDataList)
     {
-        foreach($answerResultDataList as $answerResultData) {
+        foreach ($answerResultDataList as $answerResultData) {
             $questionTitle = $answerResultData['question_title'] ?? '';
             $answerVariantTitle = $answerResultData['answer_variant_title'] ?? '';
             $answerVariant = $this->getAnswerVariantByTitle($questionTitle, $answerVariantTitle);
@@ -71,7 +80,7 @@ class VoteResult implements VoteResultInterface
         }
 
         $answerVariant = $question->getAnswerVariantByTitle($answerVariantTitle);
-        
+
         return $answerVariant instanceof AnswerVariantInterface ? $answerVariant : null;
     }
 
@@ -81,21 +90,21 @@ class VoteResult implements VoteResultInterface
      */
     public static function createNewResult(VoteSchemaInterface $voteSchema): VoteResultInterface
     {
-        return new static($voteSchema);
+        return new VoteResult($voteSchema);
     }
 
     /**
      * @param string $questionTitle
      * @param string $answerVariantTitle
-     * @param string $message
+     * @param string|null $message
      * @return AnswerResultInterface|null
+     * @throws Exception
      */
     public function createAnswerResultByTitle(
-        string $questionTitle, 
-        string $answerVariantTitle, 
+        string $questionTitle,
+        string $answerVariantTitle,
         string $message = null
-    ): ?AnswerResultInterface
-    {
+    ): ?AnswerResultInterface {
         $answerVariant = $this->getAnswerVariantByTitle($questionTitle, $answerVariantTitle);
         if (!($answerVariant instanceof AnswerVariant)) {
             return null;
@@ -114,11 +123,14 @@ class VoteResult implements VoteResultInterface
 
     /**
      * @param AnswerVariantInterface $answerVariant
-     * @param string $message
+     * @param string|null $message
      * @return AnswerResultInterface
+     * @throws Exception
      */
-    public function createAnswerResult(AnswerVariantInterface $answerVariant, string $message = null): AnswerResultInterface
-    {
+    public function createAnswerResult(
+        AnswerVariantInterface $answerVariant,
+        string $message = null
+    ): AnswerResultInterface {
         $question = $answerVariant->getQuestion();
         $vote = $question instanceof QuestionInterface ? $question->getVote() : null;
         if (empty($vote) || $vote !== $this->voteSchema) {
@@ -148,8 +160,12 @@ class VoteResult implements VoteResultInterface
     public function addAnswerResult(AnswerResultInterface $answerResult)
     {
         $question = $this->getQuestionByAnswerResult($answerResult);
+        if (empty($question)) {
+            return;
+        }
+
         if (!$question->isMultiple() && $this->hasAnswerResultByQuestion($question)) {
-            foreach($this->getAnswerResultByQuestion($question) as $currentAnswerResult) {
+            foreach ($this->getAnswerResultByQuestion($question) as $currentAnswerResult) {
                 $this->removeAnswerResult($currentAnswerResult);
             }
         }
@@ -160,11 +176,13 @@ class VoteResult implements VoteResultInterface
      /**
      * @param QuestionInterface $question
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+      *
+      * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultsByQuestion(QuestionInterface $question): ReadableCollectionInterface
     {
         $collection = new Collection();
-        foreach($this->getAnswerResults() as $answerResult) {
+        foreach ($this->getAnswerResults() as $answerResult) {
             /**
              * @var AnswerResultInterface $answerResult
              */
@@ -180,6 +198,8 @@ class VoteResult implements VoteResultInterface
     /**
      * @param string $questionTitle
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultByQuestionTitle(string $questionTitle): ReadableCollectionInterface
     {
@@ -194,6 +214,8 @@ class VoteResult implements VoteResultInterface
     /**
      * @param QuestionInterface $question
      * @return boolean
+     *
+     * @psalm-suppress PossiblyInvalidMethodCall
      */
     public function hasAnswerResultByQuestion(QuestionInterface $question): bool
     {
@@ -203,6 +225,8 @@ class VoteResult implements VoteResultInterface
     /**
      * @param string $questionTitle
      * @return boolean
+     *
+     * @psalm-suppress PossiblyInvalidMethodCall
      */
     public function hasAnswerResultByQuestionTitle(string $questionTitle): bool
     {
@@ -227,13 +251,18 @@ class VoteResult implements VoteResultInterface
     }
 
     /**
-     * @param string $action
+     * @param string|null $action
      * @return AnswerResultInterface[]|ReadableCollectionInterface
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResults(string $action = null): ReadableCollectionInterface
     {
         $collection = new Collection();
-        foreach($this->answerResults as $answerResult) {
+        foreach ($this->answerResults as $answerResult) {
+            /**
+             * @var AnswerResultInterface $answerResult
+             */
             $currentAction = $this->answerResults[$answerResult];
             if ($action === null && $currentAction !== 'delete') {
                 $collection->append($answerResult);
@@ -247,6 +276,8 @@ class VoteResult implements VoteResultInterface
 
     /**
      * @return integer
+     *
+     * @psalm-suppress PossiblyInvalidMethodCall
      */
     public function getAnswerResultsCount(): int
     {
@@ -255,12 +286,14 @@ class VoteResult implements VoteResultInterface
 
     /**
      * @param QuestionInterface $question
-     * @return AnswerResultInterface[]|ReadableCollectionInterface
+     * @return ReadableCollectionInterface|AnswerResultInterface[]
+     *
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getAnswerResultByQuestion(QuestionInterface $question): ReadableCollectionInterface
     {
         $collection = new Collection();
-        foreach($this->getAnswerResults() as $answerResult) {
+        foreach ($this->getAnswerResults() as $answerResult) {
             /**
              * @var AnswerResultInterface $answerResult
              */
@@ -280,6 +313,9 @@ class VoteResult implements VoteResultInterface
      */
     public function toArray(): array
     {
+        /**
+         * @psalm-suppress PossiblyInvalidMethodCall
+         */
         $result = [
             'props' => $this->getProps(),
             'answer' => $this->getAnswerResults()->jsonSerialize()
@@ -295,7 +331,7 @@ class VoteResult implements VoteResultInterface
      */
     public function assertValueByKey(string $key, $value): bool
     {
-        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;   
+        return $this->hasValueKey($key) && $this->getValueByKey($key) == $value;
     }
 
     /**
