@@ -28,18 +28,12 @@ class VoteResult implements VoteResultInterface
      */
     private $answerResults;
 
-    /**
-     * @var array
-     */
-    protected $props;
-
     public function __construct(
         VoteSchemaInterface $voteSchema,
         array $data = []
     ) {
         $this->voteSchema = $voteSchema;
         $this->answerResults = new SplObjectStorage();
-        $this->props = [];
         $this->initProps((array)($data['props'] ?? []));
 
         $answerResultDataList = (array)($data['answer'] ?? []);
