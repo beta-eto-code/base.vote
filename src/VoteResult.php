@@ -295,7 +295,7 @@ class VoteResult implements VoteResultInterface
             $currentQuestion = $answerVariant instanceof AnswerVariantInterface ? $answerVariant->getQuestion() : null;
 
             if ($currentQuestion === $question) {
-                $collection->append($question);
+                $collection->append($answerResult);
             }
         }
 
